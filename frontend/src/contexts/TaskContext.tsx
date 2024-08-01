@@ -57,46 +57,110 @@ interface TaskProviderProps {
   children: React.ReactNode;
 }
 
-const initialState = {
+interface TasksState {
+  tasks: Task[];
+  loading: boolean;
+  error: string | null;
+  loaded: boolean;
+}
+
+const initialState: TasksState = {
   tasks: taskListMock,
+  loading: false,
+  error: null,
+  loaded: false,
 };
 
 interface TasksContextValue {
   tasks: Task[];
+  loading: boolean;
+  error: string | null;
+  loaded: boolean;
   addTask: (task: Task) => void;
   updateTask: (task: Task) => void;
-  deleteTask: (task: Task) => void;
+  deleteTask: (taskId: number) => void;
 }
 
 export enum TaskActionTypes {
+  FETCH_TASKS = 'FETCH_TASKS',
+  FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS',
+  FETCH_TASKS_ERROR = 'FETCH_TASKS_ERROR',
   ADD_TASK = 'ADD_TASK',
+  ADD_TASK_SUCCESS = 'ADD_TASK_SUCCESS',
+  ADD_TASK_ERROR = 'ADD_TASK_ERROR',
   UPDATE_TASK = 'UPDATE_TASK',
+  UPDATE_TASK_SUCCESS = 'UPDATE_TASK_SUCCESS',
+  UPDATE_TASK_ERROR = 'UPDATE_TASK_ERROR',
   DELETE_TASK = 'DELETE_TASK',
+  DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS',
+  DELETE_TASK_ERROR = 'DELETE_TASK_ERROR',
 }
 
-type Action = {
-  type: TaskActionTypes;
-  payload: Task;
-};
+type Action =
+  | { type: TaskActionTypes.ADD_TASK; payload: Task }
+  | { type: TaskActionTypes.ADD_TASK_SUCCESS; payload: Task }
+  | { type: TaskActionTypes.ADD_TASK_ERROR; payload: string }
+  | { type: TaskActionTypes.UPDATE_TASK; payload: Task }
+  | { type: TaskActionTypes.UPDATE_TASK_SUCCESS; payload: Task }
+  | { type: TaskActionTypes.UPDATE_TASK_ERROR; payload: string }
+  | { type: TaskActionTypes.DELETE_TASK; payload: number }
+  | { type: TaskActionTypes.DELETE_TASK_SUCCESS; payload: number }
+  | { type: TaskActionTypes.DELETE_TASK_ERROR; payload: string }
+  | { type: TaskActionTypes.FETCH_TASKS }
+  | { type: TaskActionTypes.FETCH_TASKS_SUCCESS; payload: Task[] }
+  | { type: TaskActionTypes.FETCH_TASKS_ERROR; payload: string };
 
 const reducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
     case TaskActionTypes.ADD_TASK:
+    case TaskActionTypes.UPDATE_TASK:
+    case TaskActionTypes.DELETE_TASK:
+    case TaskActionTypes.FETCH_TASKS:
+      return {
+        ...state,
+        loading: true,
+        loaded: false,
+        error: null,
+      };
+    case TaskActionTypes.ADD_TASK_SUCCESS:
       return {
         ...state,
         tasks: [...state.tasks, action.payload],
+        loading: false,
+        loaded: true,
       };
-    case TaskActionTypes.UPDATE_TASK:
+    case TaskActionTypes.UPDATE_TASK_SUCCESS:
       return {
         ...state,
         tasks: state.tasks.map((task) =>
           task.id === action.payload.id ? action.payload : task
         ),
+        loading: false,
+        loaded: true,
       };
-    case TaskActionTypes.DELETE_TASK:
+    case TaskActionTypes.DELETE_TASK_SUCCESS:
       return {
         ...state,
-        tasks: state.tasks.filter((task) => task.id !== action.payload.id),
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
+        loading: false,
+        loaded: true,
+      };
+    case TaskActionTypes.FETCH_TASKS_SUCCESS:
+      return {
+        ...state,
+        tasks: action.payload,
+        loading: false,
+        loaded: true,
+      };
+    case TaskActionTypes.ADD_TASK_ERROR:
+    case TaskActionTypes.UPDATE_TASK_ERROR:
+    case TaskActionTypes.DELETE_TASK_ERROR:
+    case TaskActionTypes.FETCH_TASKS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: action.payload,
       };
     default:
       return state;
@@ -121,13 +185,21 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     dispatch({ type: TaskActionTypes.UPDATE_TASK, payload: task });
   };
 
-  const deleteTask = (task: Task) => {
-    dispatch({ type: TaskActionTypes.DELETE_TASK, payload: task });
+  const deleteTask = (taskId: number) => {
+    dispatch({ type: TaskActionTypes.DELETE_TASK, payload: taskId });
   };
 
   return (
     <TaskContext.Provider
-      value={{ tasks: tasks.tasks, addTask, updateTask, deleteTask }}
+      value={{
+        tasks: tasks.tasks,
+        loading: tasks.loading,
+        error: tasks.error,
+        loaded: tasks.loaded,
+        addTask,
+        updateTask,
+        deleteTask,
+      }}
     >
       {children}
     </TaskContext.Provider>
