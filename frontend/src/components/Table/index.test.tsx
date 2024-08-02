@@ -1,5 +1,6 @@
 import { screen, render, fireEvent } from '@testing-library/react';
 import Table from './index';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 const tasksMock = [
   {
@@ -16,22 +17,34 @@ const tasksMock = [
   },
 ];
 
+const renderComponent = () => {
+  render(
+    <TaskProvider>
+      <Table tasks={tasksMock} />
+    </TaskProvider>
+  );
+};
+
 describe('Table', () => {
   it('renders Table component', () => {
-    render(<Table tasks={[]} />);
+    render(
+      <TaskProvider>
+        <Table tasks={[]} />
+      </TaskProvider>
+    );
     const table = screen.getByTestId('tasks-table');
     expect(table).toBeInTheDocument();
   });
 
   it('renders Table component with tasks', () => {
-    render(<Table tasks={tasksMock} />);
+    renderComponent();
     const table = screen.getByTestId('tasks-table');
     expect(table).toBeInTheDocument();
     expect(screen.getAllByRole('row')).toHaveLength(3);
   });
 
   it('renders Table component with tasks and actions', () => {
-    render(<Table tasks={tasksMock} />);
+    renderComponent();
     const table = screen.getByTestId('tasks-table');
     expect(table).toBeInTheDocument();
     expect(screen.getAllByRole('row')).toHaveLength(3);
@@ -39,7 +52,7 @@ describe('Table', () => {
   });
 
   it('renders TaskModal when Edit button is clicked', () => {
-    render(<Table tasks={tasksMock} />);
+    renderComponent();
     const taskClickHandler = jest.fn();
     const editButton = screen.getAllByRole('button')[1];
     const table = screen.getByTestId('tasks-table');

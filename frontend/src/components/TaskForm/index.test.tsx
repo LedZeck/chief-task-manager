@@ -1,5 +1,6 @@
 import { screen, render, fireEvent } from '@testing-library/react';
 import TaskForm from './index';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 const formHandler = jest.fn();
 
@@ -10,7 +11,11 @@ describe('TaskForm', () => {
     HTMLDialogElement.prototype.show = jest.fn();
   });
   it('renders TaskForm component', () => {
-    render(<TaskForm submitForm={formHandler} />);
+    render(
+      <TaskProvider>
+        <TaskForm submitForm={formHandler} />
+      </TaskProvider>
+    );
     const form = screen.getByTestId('task-form');
     const titleInput = screen.getByTestId('title-input');
     const descriptionInput = screen.getByTestId('description-input');
@@ -24,7 +29,11 @@ describe('TaskForm', () => {
 
   it('submits form', () => {
     const submitFormHandler = jest.fn();
-    render(<TaskForm submitForm={formHandler} />);
+    render(
+      <TaskProvider>
+        <TaskForm submitForm={formHandler} />
+      </TaskProvider>
+    );
     const titleInput = screen.getByTestId('title-input');
     const descriptionInput = screen.getByTestId('description-input');
     const submitButton = screen.getByTestId('submit-button');

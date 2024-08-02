@@ -1,22 +1,30 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import AddTaskBar from './index';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 describe('AddTaskBar', () => {
+  const renderComponent = () => {
+    render(
+      <TaskProvider>
+        <AddTaskBar />
+      </TaskProvider>
+    );
+  };
   beforeAll(() => {
     HTMLDialogElement.prototype.showModal = jest.fn();
     HTMLDialogElement.prototype.close = jest.fn();
     HTMLDialogElement.prototype.show = jest.fn();
   });
   it('renders AddTaskBar component', () => {
-    render(<AddTaskBar />);
+    renderComponent();
     const addTaskButton = screen.getByTestId('add-task-button');
     expect(addTaskButton).toBeInTheDocument();
     expect(addTaskButton).toHaveTextContent('Add New Task');
   });
 
   it('renders TaskModal component at Add Task Button Click', () => {
-    render(<AddTaskBar />);
+    renderComponent();
     const addTaskButton = screen.getByTestId('add-task-button');
     const showModalHandler = jest.fn();
     const taskModal = screen.getByTestId('task-modal');

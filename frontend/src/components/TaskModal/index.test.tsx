@@ -1,20 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import TaskModal from './index';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 describe('TaskModal', () => {
+  const renderComponent = () => {
+    render(
+      <TaskProvider>
+        <TaskModal />
+      </TaskProvider>
+    );
+  };
   beforeAll(() => {
     HTMLDialogElement.prototype.showModal = jest.fn();
     HTMLDialogElement.prototype.close = jest.fn();
     HTMLDialogElement.prototype.show = jest.fn();
   });
   it('renders TaskModal component', () => {
-    render(<TaskModal />);
+    renderComponent();
     const taskModal = screen.getByTestId('task-modal');
     expect(taskModal).toBeInTheDocument();
   });
 
   it('renders TaskModal component with children components', () => {
-    render(<TaskModal />);
+    renderComponent();
     const taskModal = screen.getByTestId('task-modal');
     const taskForm = screen.getByTestId('task-form');
     const taskFormTitle = screen.getByTestId('title-input');
