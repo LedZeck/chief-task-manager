@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Task } from '../models/task.interface';
+import { Task, TaskPayload } from '../models/task.interface';
 
 const API_URL = 'http://localhost:5000/tasks';
 
@@ -12,7 +12,7 @@ export const getAll = async () => {
   }
 };
 
-export const create = async (task: Task) => {
+export const create = async (task: TaskPayload) => {
   try {
     const response = await axios.post<Task>(API_URL, task);
     return response.data;

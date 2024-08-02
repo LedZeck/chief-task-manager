@@ -4,3 +4,8 @@ export interface Task {
   description: string;
   complete: boolean;
 }
+
+export interface TaskPayload {
+  title: string;
+  description: string;
+}

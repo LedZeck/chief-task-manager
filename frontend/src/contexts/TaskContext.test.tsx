@@ -1,6 +1,5 @@
 import { render, screen, act } from '@testing-library/react';
 import { TaskProvider, useTasksContext } from './TaskContext';
-import { Task } from '../models/task.interface';
 import { useContext } from 'react';
 
 // Mock the useContext hook

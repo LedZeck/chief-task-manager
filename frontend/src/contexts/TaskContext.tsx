@@ -59,6 +59,7 @@ interface TaskProviderProps {
 
 interface TasksState {
   tasks: Task[];
+  selectedTask: Task | null;
   loading: boolean;
   error: string | null;
   loaded: boolean;
@@ -66,6 +67,7 @@ interface TasksState {
 
 const initialState: TasksState = {
   tasks: taskListMock,
+  selectedTask: null,
   loading: false,
   error: null,
   loaded: false,
@@ -76,9 +78,11 @@ interface TasksContextValue {
   loading: boolean;
   error: string | null;
   loaded: boolean;
+  selectedTask: Task | null;
   addTask: (task: Task) => void;
   updateTask: (task: Task) => void;
   deleteTask: (taskId: number) => void;
+  selectTask: (task: Task) => void;
 }
 
 export enum TaskActionTypes {
@@ -94,6 +98,7 @@ export enum TaskActionTypes {
   DELETE_TASK = 'DELETE_TASK',
   DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS',
   DELETE_TASK_ERROR = 'DELETE_TASK_ERROR',
+  SELECT_TASK = 'SELECT_TASK',
 }
 
 type Action =
@@ -108,7 +113,8 @@ type Action =
   | { type: TaskActionTypes.DELETE_TASK_ERROR; payload: string }
   | { type: TaskActionTypes.FETCH_TASKS }
   | { type: TaskActionTypes.FETCH_TASKS_SUCCESS; payload: Task[] }
-  | { type: TaskActionTypes.FETCH_TASKS_ERROR; payload: string };
+  | { type: TaskActionTypes.FETCH_TASKS_ERROR; payload: string }
+  | { type: TaskActionTypes.SELECT_TASK; payload: Task };
 
 const reducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
@@ -162,6 +168,11 @@ const reducer = (state: typeof initialState, action: Action) => {
         loaded: false,
         error: action.payload,
       };
+    case TaskActionTypes.SELECT_TASK:
+      return {
+        ...state,
+        selectedTask: action.payload,
+      };
     default:
       return state;
   }
@@ -189,6 +200,10 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     dispatch({ type: TaskActionTypes.DELETE_TASK, payload: taskId });
   };
 
+  const selectTask = (task: Task) => {
+    dispatch({ type: TaskActionTypes.SELECT_TASK, payload: task });
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -196,9 +211,11 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
         loading: tasks.loading,
         error: tasks.error,
         loaded: tasks.loaded,
+        selectedTask: tasks.selectedTask,
         addTask,
         updateTask,
         deleteTask,
+        selectTask,
       }}
     >
       {children}

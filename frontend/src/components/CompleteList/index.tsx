@@ -5,7 +5,7 @@ function CompleteList() {
   const { tasks } = useTasksContext();
   return (
     <section data-testid="complete-list">
-      <Table tasks={tasks.filter((task) => task.complete)} />;
+      <Table tasks={tasks.filter((task) => task.complete)} />
     </section>
   );
 }

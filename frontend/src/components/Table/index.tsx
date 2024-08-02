@@ -1,4 +1,5 @@
 import { Task } from '../../models/task.interface';
+import { useTasksContext } from '../../contexts/TaskContext';
 
 export interface TableProps {
   tasks: Task[];
@@ -11,6 +12,8 @@ enum TaskAction {
 }
 
 function Table({ tasks }: TableProps) {
+  const { selectTask } = useTasksContext();
+
   const taskClickHandler = (id: number, action: string) => {
     switch (action) {
       case TaskAction.SELECTED:
@@ -28,6 +31,10 @@ function Table({ tasks }: TableProps) {
   };
 
   const openEditDialog = (id: number) => {
+    const task = tasks.find((task) => task.id === id);
+    if (task) {
+      selectTask(task);
+    }
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
     if (modal) {
       modal.showModal();

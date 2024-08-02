@@ -1,4 +1,5 @@
-import { ChangeEvent, useState, MouseEvent } from 'react';
+import { ChangeEvent, useState, MouseEvent, useEffect } from 'react';
+import { useTasksContext } from '../../contexts/TaskContext';
 
 interface TaskFormProps {
   submitForm: (form: { title: string; description: string }) => void;
@@ -7,6 +8,7 @@ interface TaskFormProps {
 function TaskForm({ submitForm }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const { selectedTask } = useTasksContext();
 
   const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -22,6 +24,11 @@ function TaskForm({ submitForm }: TaskFormProps) {
 
   const submitFormHandler = (e: MouseEvent) => {
     e.preventDefault();
+
+    if (!title || !description) {
+      return;
+    }
+
     submitForm({ title, description });
     setDescription('');
     setTitle('');
@@ -30,6 +37,16 @@ function TaskForm({ submitForm }: TaskFormProps) {
       modal.close();
     }
   };
+
+  useEffect(() => {
+    if (selectedTask) {
+      setTitle(selectedTask.title);
+      setDescription(selectedTask.description);
+    } else {
+      setTitle('');
+      setDescription('');
+    }
+  }, [selectedTask]);
 
   return (
     <form data-testid="task-form">
