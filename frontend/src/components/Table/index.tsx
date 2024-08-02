@@ -12,18 +12,22 @@ enum TaskAction {
 }
 
 function Table({ tasks }: TableProps) {
-  const { selectTask } = useTasksContext();
+  const { selectTask, updateTask } = useTasksContext();
 
   const taskClickHandler = (id: number, action: string) => {
     switch (action) {
       case TaskAction.SELECTED:
-        console.log('Selected');
+        let task = tasks.find((task) => task.id === id);
+        if (task) {
+          task = { ...task, complete: !task.complete };
+          updateTask(task);
+        }
         break;
       case TaskAction.EDIT:
         openEditDialog(id);
         break;
       case TaskAction.DELETE:
-        console.log('Delete');
+        openDeleteDialog(id);
         break;
       default:
         console.log('Invalid action');
@@ -36,6 +40,19 @@ function Table({ tasks }: TableProps) {
       selectTask(task);
     }
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
+  const openDeleteDialog = (id: number) => {
+    const task = tasks.find((task) => task.id === id);
+    if (task) {
+      selectTask(task);
+    }
+    const modal = document.getElementById(
+      'delete-task-modal'
+    ) as HTMLDialogElement;
     if (modal) {
       modal.showModal();
     }

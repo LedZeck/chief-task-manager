@@ -1,5 +1,6 @@
 import AddTaskbar from '../../components/AddTaskBar';
 import CompleteList from '../../components/CompleteList';
+import DeleteTaskModal from '../../components/DeleteTaskModal';
 import Hero from '../../components/Hero';
 import Navbar from '../../components/Navbar';
 import TodoList from '../../components/TodoList';
@@ -24,6 +25,7 @@ function Main() {
             <CompleteList />
           </div>
         </div>
+        <DeleteTaskModal />
       </TaskProvider>
     </div>
   );
