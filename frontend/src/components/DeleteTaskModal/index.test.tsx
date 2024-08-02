@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import DeleteTaskModal from './index';
-import { TaskProvider, useTasksContext } from '../../contexts/TaskContext';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 describe('DeleteTaskModal', () => {
   const renderComponent = () => {
