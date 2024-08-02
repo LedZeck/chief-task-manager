@@ -3,7 +3,11 @@ import { useTasksContext } from '../../contexts/TaskContext';
 
 function TodoList() {
   const { tasks } = useTasksContext();
-  return <Table tasks={tasks.filter((task) => !task.complete)} />;
+  return (
+    <section data-testid="todo-list">
+      <Table tasks={tasks.filter((task) => !task.complete)} />
+    </section>
+  );
 }
 
 export default TodoList;

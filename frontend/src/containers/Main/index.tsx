@@ -8,7 +8,7 @@ import { TaskProvider } from '../../contexts/TaskContext';
 
 function Main() {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto" data-testid="main">
       <Navbar />
       <Hero />
       <TaskProvider>

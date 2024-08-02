@@ -26,27 +26,32 @@ function TaskForm({ submitForm }: TaskFormProps) {
     setDescription('');
     setTitle('');
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
-    modal.close();
+    if (modal) {
+      modal.close();
+    }
   };
 
   return (
-    <form>
+    <form data-testid="task-form">
       <input
         type="text"
         placeholder="Type here"
         className="input input-secondary input-bordered input-lg w-full max-w-xs mb-6"
         onChange={(event) => handleTitle(event)}
         value={title}
+        data-testid="title-input"
       />
       <textarea
         className="textarea textarea-secondary textarea-lg w-full max-w-xs mb-6"
         placeholder="Description"
         onChange={(event) => handleDescription(event)}
         value={description}
+        data-testid="description-input"
       ></textarea>
       <button
         className="btn btn-success w-full max-w-xs"
         onClick={submitFormHandler}
+        data-testid="submit-button"
       >
         Save
       </button>
