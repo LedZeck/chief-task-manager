@@ -6,9 +6,14 @@ function DeleteTaskModal() {
     const selectedTaskId = selectedTask?.id;
     if (selectedTaskId) {
       deleteTask(selectedTaskId);
+      closeModal();
     }
   };
   const deleteCancelHandler = () => {
+    closeModal();
+  };
+
+  const closeModal = () => {
     const modal = document.getElementById(
       'delete-task-modal'
     ) as HTMLDialogElement;
@@ -16,6 +21,7 @@ function DeleteTaskModal() {
       modal.close();
     }
   };
+
   return (
     <dialog
       data-testid="delete-task-modal"

@@ -1,14 +1,22 @@
 import { render, screen } from '@testing-library/react';
 import Main from './index';
+import { TaskProvider } from '../../contexts/TaskContext';
 
 describe('Main', () => {
+  const renderComponent = () => {
+    render(
+      <TaskProvider>
+        <Main />
+      </TaskProvider>
+    );
+  };
   it('renders Main component', () => {
-    render(<Main />);
+    renderComponent();
     const main = screen.getByTestId('main');
     expect(main).toBeInTheDocument();
   });
   it('renders Main component with children components', () => {
-    render(<Main />);
+    renderComponent();
     const hero = screen.getByTestId('hero');
     const addTaskBar = screen.getByTestId('add-task-bar');
     const todoList = screen.getByTestId('todo-list');

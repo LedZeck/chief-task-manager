@@ -110,7 +110,7 @@ type Action =
   | { type: TaskActionTypes.UPDATE_TASK_SUCCESS; payload: Task }
   | { type: TaskActionTypes.UPDATE_TASK_ERROR; payload: string }
   | { type: TaskActionTypes.DELETE_TASK; payload: number }
-  | { type: TaskActionTypes.DELETE_TASK_SUCCESS; payload: number }
+  | { type: TaskActionTypes.DELETE_TASK_SUCCESS }
   | { type: TaskActionTypes.DELETE_TASK_ERROR; payload: string }
   | { type: TaskActionTypes.FETCH_TASKS }
   | { type: TaskActionTypes.FETCH_TASKS_SUCCESS; payload: Task[] }
@@ -148,7 +148,6 @@ const reducer = (state: typeof initialState, action: Action) => {
     case TaskActionTypes.DELETE_TASK_SUCCESS:
       return {
         ...state,
-        tasks: state.tasks.filter((task) => task.id !== action.payload),
         loading: false,
         loaded: true,
       };
@@ -187,18 +186,33 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
   const [tasks, dispatch] = useReducer(reducer, initialState);
 
   const addTask = async (task: Task) => {
+    dispatch({ type: TaskActionTypes.ADD_TASK, payload: task });
     const response = await create(task);
     if (response) {
-      dispatch({ type: TaskActionTypes.ADD_TASK, payload: response });
+      dispatch({ type: TaskActionTypes.ADD_TASK_SUCCESS, payload: response });
+      fetchTasks();
     }
   };
 
-  const updateTask = (task: Task) => {
+  const updateTask = async (task: Task) => {
     dispatch({ type: TaskActionTypes.UPDATE_TASK, payload: task });
+    const response = await update(task);
+    if (response) {
+      dispatch({
+        type: TaskActionTypes.UPDATE_TASK_SUCCESS,
+        payload: response,
+      });
+      fetchTasks();
+    }
   };
 
-  const deleteTask = (taskId: number) => {
+  const deleteTask = async (taskId: number) => {
     dispatch({ type: TaskActionTypes.DELETE_TASK, payload: taskId });
+    const response = await destroy(taskId);
+    if (response) {
+      dispatch({ type: TaskActionTypes.DELETE_TASK_SUCCESS });
+      fetchTasks();
+    }
   };
 
   const selectTask = (task: Task) => {
@@ -209,7 +223,6 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     dispatch({ type: TaskActionTypes.FETCH_TASKS });
     const response = await getAll();
     if (response) {
-      console.log(response);
       dispatch({
         type: TaskActionTypes.FETCH_TASKS_SUCCESS,
         payload: response,

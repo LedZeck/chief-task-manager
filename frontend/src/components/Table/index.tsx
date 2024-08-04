@@ -71,44 +71,49 @@ function Table({ tasks }: TableProps) {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.title}</td>
-                <td>{task.description}</td>
-                <td className="space-x-2">
-                  <button
-                    className="btn btn-outline btn-success"
-                    onClick={() => {
-                      if (task.id) {
-                        taskClickHandler(task.id, TaskAction.SELECTED);
-                      }
-                    }}
-                  >
-                    {task.complete ? 'Completed' : 'Incomplete'}
-                  </button>
-                  <button
-                    className="btn btn-outline btn-secondary"
-                    onClick={() => {
-                      if (task.id) {
-                        taskClickHandler(task.id, TaskAction.EDIT);
-                      }
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-outline btn-error"
-                    onClick={() => {
-                      if (task.id) {
-                        taskClickHandler(task.id, TaskAction.DELETE);
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {tasks.map(
+              (task) => (
+                console.log(task),
+                (
+                  <tr key={task.id}>
+                    <td>{task.title}</td>
+                    <td>{task.description}</td>
+                    <td className="space-x-2">
+                      <button
+                        className="btn btn-outline btn-success"
+                        onClick={() => {
+                          if (task.id) {
+                            taskClickHandler(task.id, TaskAction.SELECTED);
+                          }
+                        }}
+                      >
+                        {task.complete ? 'Completed' : 'Incomplete'}
+                      </button>
+                      <button
+                        className="btn btn-outline btn-secondary"
+                        onClick={() => {
+                          if (task.id) {
+                            taskClickHandler(task.id, TaskAction.EDIT);
+                          }
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-outline btn-error"
+                        onClick={() => {
+                          if (task.id) {
+                            taskClickHandler(task.id, TaskAction.DELETE);
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )
+            )}
           </tbody>
         </table>
       </div>

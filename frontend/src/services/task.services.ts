@@ -23,7 +23,7 @@ export const create = async (task: TaskPayload) => {
 
 export const update = async (task: Task) => {
   try {
-    const response = await axios.put<Task>(`${API_URL}/${task.id}`, task);
+    const response = await axios.put<Task>(`${API_URL}`, task);
     return response.data;
   } catch (error) {
     console.error(error);

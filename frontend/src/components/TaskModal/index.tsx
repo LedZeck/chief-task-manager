@@ -4,11 +4,11 @@ import { useTasksContext } from '../../contexts/TaskContext';
 function TaskModal() {
   const { addTask, updateTask, selectedTask, selectTask } = useTasksContext();
   const formHandler = (form: { title: string; description: string }) => {
+    console.log(selectedTask);
     if (selectedTask) {
       updateTask({ ...selectedTask, ...form });
     } else {
-      // addTask(form);
-      console.log('addTask');
+      addTask({ ...form, complete: false });
     }
   };
 

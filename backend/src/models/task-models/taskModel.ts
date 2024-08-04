@@ -22,8 +22,8 @@ export const createTask = async (task: Task) => {
 
 export const updateTask = async (task: Task): Promise<Task[]> => {
   const [result] = await connection.execute(
-    'UPDATE tasks SET title = ?, completed = ? WHERE id = ?',
-    [task.title, task.complete, task.id]
+    'UPDATE tasks SET title = ?, description = ?, complete = ? WHERE id = ?',
+    [task.title, task.description, task.complete, task.id]
   );
   return result as Task[];
 };

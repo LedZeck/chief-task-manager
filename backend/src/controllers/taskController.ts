@@ -46,9 +46,9 @@ export const updateTasks = async (req: TaskRequest, res: Response) => {
 };
 
 export const deleteTasks = async (req: TaskRequest, res: Response) => {
-  const task = req.body;
+  const task = parseInt(req.params.id);
   try {
-    const result: Task[] = await deleteTask(task.id);
+    const result: Task[] = await deleteTask(task);
     return res.status(201).json(result);
   } catch (error) {
     return res.status(500).send(new Error('Internal Server Error'));
