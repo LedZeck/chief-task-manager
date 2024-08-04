@@ -83,6 +83,7 @@ interface TasksContextValue {
   updateTask: (task: Task) => void;
   deleteTask: (taskId: number) => void;
   selectTask: (task: Task) => void;
+  fetchTasks: () => void;
 }
 
 export enum TaskActionTypes {
@@ -204,6 +205,23 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     dispatch({ type: TaskActionTypes.SELECT_TASK, payload: task });
   };
 
+  const fetchTasks = async () => {
+    dispatch({ type: TaskActionTypes.FETCH_TASKS });
+    const response = await getAll();
+    if (response) {
+      console.log(response);
+      dispatch({
+        type: TaskActionTypes.FETCH_TASKS_SUCCESS,
+        payload: response,
+      });
+    } else {
+      dispatch({
+        type: TaskActionTypes.FETCH_TASKS_ERROR,
+        payload: 'Error fetching tasks',
+      });
+    }
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -216,6 +234,7 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
         updateTask,
         deleteTask,
         selectTask,
+        fetchTasks,
       }}
     >
       {children}

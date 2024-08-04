@@ -4,7 +4,7 @@ export type Task = {
   id: number;
   title: string;
   description: string;
-  complete: boolean;
+  complete: boolean | number;
 };
 
 export async function getAllTasks(): Promise<Task[]> {

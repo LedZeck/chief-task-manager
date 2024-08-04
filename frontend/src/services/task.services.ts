@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Task, TaskPayload } from '../models/task.interface';
 
-const API_URL = 'http://localhost:5000/tasks';
+const API_URL = 'http://localhost:3001/tasks';
 
 export const getAll = async () => {
   try {

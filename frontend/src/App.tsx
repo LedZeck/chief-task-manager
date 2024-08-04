@@ -2,11 +2,14 @@ import React from 'react';
 import './App.css';
 
 import Main from './containers/Main';
+import { TaskProvider } from './contexts/TaskContext';
 
 function App() {
   return (
     <div className="App">
-      <Main />
+      <TaskProvider>
+        <Main />
+      </TaskProvider>
     </div>
   );
 }

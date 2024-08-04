@@ -2,10 +2,10 @@ CREATE TABLE IF NOT EXISTS tasks (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  completed TINYINT(1) DEFAULT 0
+  complete TINYINT(1) DEFAULT 0
 );
 
-INSERT INTO tasks (title, description, completed) VALUES
+INSERT INTO tasks (title, description, complete) VALUES
     ('Task 1', 'Description 1', 0),
     ('Task 2', 'Description 2', 1),
     ('Task 3', 'Description 3', 0),

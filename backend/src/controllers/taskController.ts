@@ -15,6 +15,9 @@ export interface TaskRequest extends Request {
 export async function getTasks(req: Request, res: Response) {
   try {
     const tasks = await getAllTasks();
+    tasks.map((task) => {
+      task.complete = task.complete === 1 ? true : false;
+    });
     return res.status(200).json(tasks);
   } catch (error) {
     return res.status(500).send(new Error('Internal Server Error'));
