@@ -7,6 +7,8 @@ In order to correctly run this project, please make sure that you have the follo
 
 ## Starting the database setup:
 
+**Note: the .env file it's in the repository only for the test, it doesn't represent a real enviroment information and shouldn't be pushed in a real world scenario**
+
 - From the project root folder, enter the backend directory
   `cd backend/`;
 - Once inside the backend folder, start the database Docker container by running:
